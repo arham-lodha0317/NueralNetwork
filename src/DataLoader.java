@@ -71,13 +71,13 @@ public class DataLoader {
             validation[i] = new ArrayList<>();
         }
 
-//        for (ArrayList<Double>[] arrayLists : fullTrain) {
-//            train[r.nextInt(numTrain)].add(arrayLists);
-//        }
-//
-//        for (ArrayList<Double>[] arrayLists : fullVal) {
-//            validation[r.nextInt(numVal)].add(arrayLists);
-//        }
+        for (ArrayList<Double>[] arrayLists : fullTrain) {
+            train[r.nextInt(numTrain)].add(arrayLists);
+        }
+
+        for (ArrayList<Double>[] arrayLists : fullVal) {
+            validation[r.nextInt(numVal)].add(arrayLists);
+        }
 
         for (int i = 0; i < fullTrain.size(); i++) {
             train[i].add(fullTrain.get(i));
@@ -86,6 +86,22 @@ public class DataLoader {
         this.batchSize = batchSize;
 
         System.out.println("Finished Loading Data");
+    }
+
+    public DataLoader(ArrayList<ArrayList<Double>[]> trainingData, int seed, int numInput, int numOutput){
+        Random r = new Random();
+
+        this.numInput = numInput;
+        this.numOutput = numOutput;
+
+        train = new ArrayList[trainingData.size()];
+
+        for (int i = 0; i < trainingData.size(); i++) {
+            if(train[i] == null) train[i] = new ArrayList<>();
+
+            train[i].add(trainingData.get(i));
+        }
+
     }
 
     public void setModel(Network model) throws Exception {
@@ -119,18 +135,6 @@ public class DataLoader {
 
     public Matrix predict(ArrayList<Double> input) throws Exception {
         return model.predict(input);
-    }
-
-    public static void main(String[] args) throws Exception {
-        DataLoader d = new DataLoader("xor3.txt", 1, 2, 1, 0,100);
-        d.setModel(new Network(2,2,1, 100));
-        d.train(1000, .1);
-
-        ArrayList<Double> input = new ArrayList<>();
-        input.add(0.0);
-        input.add(1.0);
-
-        System.out.println(d.predict(input));
     }
 
 
